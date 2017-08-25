@@ -12,6 +12,10 @@ switch( $_GET["action"] ) {
     header('Content-Transfer-Encoding: binary');
     ob_end_flush();  // close PHP output buffering
     $data=openssl_random_pseudo_bytes(1048576);
+      $logFile= fopen("onefilespeedtester.log", "a"); // Write IP and DateTime on .log file
+      $appendT = "[".date("Y/d/m - H:i:s")."] - ".$_SERVER['REMOTE_ADDR']."\n";
+      fwrite($logFile, $appendT);
+      fclose($logFile);
     for( $i=0; $i<100000; $i++ ) {
       echo $data;
       flush();
