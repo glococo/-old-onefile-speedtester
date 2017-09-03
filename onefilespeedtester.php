@@ -12,7 +12,7 @@ switch( $_GET["action"] ) {
     header('Content-Transfer-Encoding: binary');
     ob_end_flush();  // close PHP output buffering
     $data=openssl_random_pseudo_bytes(1048576);
-      $logFile= fopen("onefilespeedtester.log", "a"); // Write IP and DateTime on .log file
+      $logFile= fopen("onefilespeedtester.log", "a");
       $appendT = "[".date("Y/d/m - H:i:s")."] - ".$_SERVER['REMOTE_ADDR']."\n";
       fwrite($logFile, $appendT);
       fclose($logFile);
@@ -29,55 +29,51 @@ switch( $_GET["action"] ) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>ES6/PHP One File Speedtester</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="https://openlayers.org/en/v4.3.1/css/ol.css" type="text/css">
+  <script src="https://openlayers.org/en/v4.3.1/build/ol.js"></script>
+  <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script>
   <style type="text/css">
-        .st-block { text-align: center; }
-        .st-sec { width:40px; }
+    html, body { height: 100%; }
+    body { padding:0; margin:0; font-family: Ubuntu, sans-serif; }
+    .map { height:100%; width:100%; opacity:1.0; position: absolute; z-index:1 }
+    .main{ height:100%; width:100%; opacity:.75; position: absolute; z-index:2; background-color:transparent; }
+    div[id^="mt_"]{ width:100%; text-align:center; vertical-align:middle }
+    input[type=button] { font: 25px Ubuntu, sans-serif; padding: .5vw 6vw; text-align:center; box-shadow: .1vw .1vw .5vw RGBA(5,5,5,.5); border:0; border-radius: .25vw; }
+    #st-start { background: linear-gradient(#73c3f9, #2980b9, #3498db); color: #FFF }
+    #st-start:hover { background-color: #08f; color: #fff; border-color: #08f }
+    #st-stop { background: linear-gradient(#ff6767, #bd0b0b, #c72e2e); color: #FFF; display:none}
+    #st-stop:hover  { background-color: #C23; color: #FFF; border-color: #C23 }
+    #mt_1 { font-size: 6vw; color:#FFF; text-shadow:1px 1px 4px #000 }
+    #mt_1a{ font-size: 2vw; color:#FFF; text-shadow:0px 0px 4px #000 }
+    #mt_4 { display:none; height: 20vh; background: linear-gradient(RGBA(4,4,4,.4), RGBA(4,4,4,.8)); /*display:table;*/ border-collapse: separate;border-spacing: .3vw;}
+    #mt_4 div { width:24%; display:table-cell; vertical-align:middle; border-radius: 1vw 1vw 0 0; background:linear-gradient(RGBA(4,4,4,.4), RGBA(4,4,4,.8)) }
+    .st-sec { width:40px }
+    .progress-bar { display: inline-block; position: relative; width:280px;height:280px; margin:0; padding:0; opacity: 0; transition: opacity 1s ease-in-out}
+    .progress-bar canvas { position: absolute; left:0}
+    .progress-data{ position:relative; top: 80px; text-align: center; color: #48718c}
+    #pdAccMB, #pdSpeMB { font-size: 20px }
+    #pdUnit,#pdTest  { font-size: 15px }
+    #pdSpeed { font-size: 50px; line-height:100% }
   </style>
 </head>
 
-<body class="my-4">
-
-    <div class="container">
-        <div class="row">
-
-            <div class="col-sm-12 mb-3">
-                <p class="h1">
-                    ES6/PHP One File Speedtest
-                    <button id="st-start" class="btn btn-outline-primary st-btn" onclick="startTest()">Start</button>
-                    <button id="st-stop" class="btn btn-danger st-btn" onclick="stopTest()" hidden="true">Stop</button>
-                </p>
-                <p class="lead">
-                    Your IP: <span id="st-ip"></span> - Your connection is <span id="st-co"></span> - Default Up/Down seconds <input class="st-sec" id="st-sec" type="text" value="20">
-                </p>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-3 st-block">
-                <h3>Ping</h3>
-                <p id="st-pingp"></p>
-                <span class="display-4" id="st-ping">0.00</span>
-                <span class="lead">ms</span>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-3 st-block">
-                <h3>Jitter</h3>
-                <p id="st-jitterp"></p>
-                <span class="display-4" id="st-jitter">0.00</span>
-                <span class="lead">ms</span>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-3 st-block">
-                <h3>Download</h3>
-                <p id="st-downloadp"></p>
-                <span class="display-4" id="st-download">0.00</span>
-                <span class="lead">Mbit/s</span><br><span id="cu-download"></span></p>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-3 st-block">
-                <h3>Upload</h3>
-                <p id="st-uploadp"></p>
-                <p><span class="display-4" id="st-upload">0.00</span>
-                <span class="lead">Mbit/s</span><br><span id="cu-upload"></span></p>
-            </div>
-        </div>
+<body>
+  <div id="map" class="map"></div>
+  <div class="main">
+    <div id="mt_1">ES6/PHP One File Speedtest</div>
+    <div id="mt_1a"></div>
+    <div id="mt_2"><div class="progress-bar" id="progress-bar">
+        <canvas id="pBase" height="280px" width="280px"></canvas>
+        <canvas id="pBlue" height="280px" width="280px"></canvas>
+        <div class="progress-data"> <span id="pdAccMB"></span><br><span id="pdSpeed"></span><br><span id="pdUnit"></span><br><span id="pdSpeMB"></span><br><br><span id="pdTest"></span> </div>
+      </div>
     </div>
+    <div id="mt_3"><input type="button" id="st-start" onclick="startTest()" value=" S t a r t ">
+                   <input type="button" id="st-stop" onclick="stopTest()" value=" S t o p ">
+    </div>
+    <div id="mt_4"> <div id="gohome">&nbsp;</div><div id="goresults">b</div><div id="goconfig">c</div><div id="goabout">d</div> </div>
+  </div>
+</body>
 
 <script id="workerBlob" type="javascript/worker">
 var xhr = null              // array of currently active xhr requests
@@ -106,7 +102,7 @@ var settings = {
   urlUpload: '?action=upload&rnd=',
   urlDownload: '?action=download&rnd=',
   tUpDown: 20,                          // Seconds to test Upload/Download Speed
-  pCache: 5000,                         // Wait miliseconds for increase TCP/IP:window -> maxSpeed
+  pCache: 3000,                         // Wait miliseconds for increase TCP/IP:window -> maxSpeed
   compFactor: 1048576/925000            // Compensation for HTTP+TCP+IP+ETH overhead. 925000 is how much data is actually carried over 1048576 (1mb) bytes downloaded/uploaded. This default value assumes HTTP+TCP+IPv4+ETH with typical MTUs over the Internet. You may want to change this if you're going through your local network with a different MTU or if you're going over IPv6
 }
 
@@ -133,7 +129,7 @@ function ping() {
   var xhrPing = []
   var xhrJitt = 0
   var counter = 0
-  wStatus.pingp = '0 %'
+  wStatus.pingp = 0
 
   xhr = new XMLHttpRequest()
   xhr.open('GET', settings.cUrl+settings.urlPing+Math.random() )
@@ -143,10 +139,10 @@ function ping() {
     if (counter>1) wStatus.jitter= (xhrJitt / (counter-1)).toFixed(2)
     if (counter<settings.count_ping ) {
       counter++
-      wStatus.pingp=((counter/settings.count_ping)*100).toFixed() + ' %'
+      wStatus.pingp=((counter/settings.count_ping)*100).toFixed()
       xhrPing[counter] = performance.now()
       if (xhr) { xhr.open('GET', settings.cUrl+settings.urlPing+Math.random()); xhr.send() }
-    } else { wStatus.pingp='100 %'; download() }
+    } else { wStatus.pingp=100; download() }
   }
   xhr.onerror = ()=>{ wStatus.ping= 'Fail'; wStatus.jitter= 'Fail'; clearRequests(2) }
   xhrPing[counter] = performance.now()
@@ -163,7 +159,7 @@ function download() {
   var syncPCache= 0
   var loadedArr = []
   var Url= settings.cUrl+settings.urlDownload+Math.random()
-  wStatus.downloadp= '0 %'
+  wStatus.downloadp= 0
 
   xhr = new XMLHttpRequest()
   xhr.responseType= 'arraybuffer'
@@ -181,7 +177,7 @@ function download() {
     let rNow= new Date().getTime()
     let msElapsed= rNow-startTime
     let loadedMBs= (loadedAcu+loadedTot)/1024/1024
-    wStatus.downloadp = ((msElapsed/10)/settings.tUpDown).toFixed() + ' %'
+    wStatus.downloadp = ((msElapsed/10)/settings.tUpDown).toFixed()
     wStatus.downloadMB= loadedMBs.toFixed(2) + ' MB'
     if(loadedArr.length>7) wStatus.downloadCu=((loadedMBs-loadedArr[8])/2).toFixed(2) + ' MB/s'
     loadedArr.unshift(loadedMBs);
@@ -192,8 +188,8 @@ function download() {
         speed= (loadedAcu+loadedTot-loadedPre) *1000 / (msElapsed-syncPCache)
         wStatus.download= ((speed*8*settings.compFactor)/1048576).toFixed(2)
       }
-      if( (rNow-startTime)>(settings.tUpDown*1000) ) { clearInterval(interval); xhr.abort(); wStatus.downloadp= '100 %'; upload() }
-    } else { wStatus.download='wait' }
+      if( (rNow-startTime)>(settings.tUpDown*1000) ) { clearInterval(interval); xhr.abort(); wStatus.downloadp=100; upload() }
+    } else { wStatus.download=999 }
   }, 250 )
 }
 
@@ -215,7 +211,7 @@ function upload() {
   gArray = new Blob(gArray)
   var fd = new FormData();
   fd.append("gfile", gArray);
-  wStatus.uploadp= '0 %'
+  wStatus.uploadp= 0
 
   xhr = new XMLHttpRequest()
   xhr.upload.onprogress= (o)=>loadedTot=o.loaded
@@ -232,7 +228,7 @@ function upload() {
     let rNow= new Date().getTime()
     let msElapsed= rNow-startTime
     let loadedMBs= (loadedAcu+loadedTot)/1024/1024
-    wStatus.uploadp=((msElapsed/10)/settings.tUpDown).toFixed() + ' %'
+    wStatus.uploadp=((msElapsed/10)/settings.tUpDown).toFixed()
     wStatus.uploadMB=loadedMBs.toFixed(2) + ' MB'
     if(loadedArr.length>7) wStatus.uploadCu=((loadedMBs-loadedArr[8])/2).toFixed(2) + ' MB/s'
     loadedArr.unshift(loadedMBs);
@@ -243,8 +239,8 @@ function upload() {
         let speed= (loadedAcu+loadedTot-loadedPre)*1000 / (msElapsed-syncPCache)
         wStatus.upload= ((speed*8*settings.compFactor)/1048576).toFixed(2)
       }
-      if( (rNow-startTime)>(settings.tUpDown*1000) ) { wStatus.uploadp= '100 %'; clearRequests(1) }
-    } else { wStatus.upload= 'wait' }
+      if( (rNow-startTime)>(settings.tUpDown*1000) ) { wStatus.uploadp=100; clearRequests(1) }
+    } else { wStatus.upload=999 }
   }, 250 )
 
 }
@@ -252,62 +248,170 @@ function upload() {
 </script>
 
 <script type="text/javascript">
+  // Canvas Speedometer
+  e=document.getElementById('pBase').getContext('2d')
+  e.lineCap= 'butt'
+  e.beginPath()
+  e.lineWidth= 15
+  e.strokeStyle= '#DDD'
+  e.arc(140,140,129,0,2*Math.PI)
+  e.stroke()
+  e.beginPath()
+  e.lineWidth= 19
+  e.strokeStyle= '#AAA'
+  e.arc(140,140,110,0,2*Math.PI)
+  e.stroke()
+  e.beginPath()
+//  e.lineWidth= 19
+  e.strokeStyle= '#EEE'
+  e.arc(140,140,110,.25*Math.PI,.75*Math.PI)
+  e.stroke()
+  e.beginPath()
+  e.lineWidth= 0
+  e.fillStyle= '#FFF'
+  e.arc(140,140,100,0,2*Math.PI)
+  e.fill()
+
+function drawBlue(percent,total){
+  percent=percent/100
+  total=total/100
+  var blue= document.getElementById('pBlue').getContext("2d")
+  var pArcEnd= (2*percent*Math.PI*.75 + Math.PI*.75)
+  var tArcEnd= (2*total*Math.PI*.75 + Math.PI*.75)
+  var arcStart= Math.PI*.75
+
+  blue.clearRect(0, 0, 280, 280);
+
+  blue.lineCap= 'butt'
+  blue.beginPath()
+  blue.setLineDash([]);
+  blue.lineWidth= 19
+  blue.strokeStyle= '#0BF'
+  blue.arc(140,140,110, arcStart, tArcEnd)
+  blue.stroke()
+
+  blue.lineCap= 'butt'
+  blue.beginPath()
+  blue.setLineDash([20, 5])
+  blue.lineWidth= 10
+  blue.strokeStyle= '#0BF'
+  blue.arc(140,140,90, arcStart, pArcEnd)
+  blue.stroke()
+}
 
   var worker = null
   var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  document.getElementById('st-ip').textContent='<?php echo $_SERVER['REMOTE_ADDR']?>'
-  document.getElementById('st-co').textContent=connection.type
-  if( connection.type=='cellular' ) document.getElementById('st-sec').value=10
+  var clientIP='<?php echo $_SERVER['REMOTE_ADDR']?>'
+  var wireless=''
+  try { if (connection.type) wireless=connection.type } catch (e) {}
+  if (wireless) { document.getElementById('mt_1a').innerHTML='Connected trought '+wireless+' - IP: '+clientIP }
+    else { document.getElementById('mt_1a').innerHTML='Your IP: '+clientIP }
 
   function startTest() {
-    if( document.getElementById('st-sec').value<5 ) document.getElementById('st-sec').value=5
-
-    document.getElementById('st-start').hidden = true
-    document.getElementById('st-stop').hidden = false
+    document.getElementById('progress-bar').style.opacity=1;
+    document.getElementById('st-start').style.display= "none"
+    document.getElementById('st-stop').style.display= "unset"
 
     var blob = new Blob([ document.querySelector('#workerBlob').textContent ], { type: "text/javascript" });
     worker = new Worker(window.URL.createObjectURL(blob));
     var askInterval = setInterval( ()=>worker.postMessage({action:"status"}), 100)
     worker.onmessage = (e) => {
-      var ping = document.getElementById('st-ping')
-      var pingp = document.getElementById('st-pingp')
-      var jitter = document.getElementById('st-jitter')
-      var jitterp = document.getElementById('st-jitterp')
-      var upload = document.getElementById('st-upload')
-      var uploadp = document.getElementById('st-uploadp')
-      var uploadCu = document.getElementById('cu-upload')
-      var download = document.getElementById('st-download')
-      var downloadp = document.getElementById('st-downloadp')
-      var downloadCu = document.getElementById('cu-download')
+      var pdAccMB = document.getElementById('pdAccMB')
+      var pdSpeed = document.getElementById('pdSpeed')
+      var pdSpeMB = document.getElementById('pdSpeMB')
+      var pdTest  = document.getElementById('pdTest')
+      var pTotal;
 
       if (e.data["status"] < 3) {
         clearInterval(askInterval)
-        document.getElementById('st-start').hidden = false
-        document.getElementById('st-stop').hidden = true
+        document.getElementById('st-start').style.display= "unset"
+        document.getElementById('st-stop').style.display= "none"
         worker = null
         console.log("Done, status: "+e.data["status"])
       }
-      ping.textContent = e.data["ping"]
-      pingp.textContent = e.data["pingp"]
-      jitter.textContent = e.data["jitter"]
-      jitterp.textContent = e.data["pingp"]
-      download.textContent = e.data["download"]
-      downloadCu.textContent = e.data["downloadCu"]
-      downloadp.textContent = e.data["downloadp"]+' - '+e.data["downloadMB"]
-      upload.textContent = e.data["upload"]
-      uploadCu.textContent = e.data["uploadCu"]
-      uploadp.textContent = e.data["uploadp"]+' - '+e.data["uploadMB"]
+      if (e.data["status"]==4) {
+          pdTest.textContent="Ping + Jitter"
+          pTotal= e.data["pingp"]/5
+          drawBlue( e.data["pingp"], pTotal )
+          pdAccMB.textContent=""
+          pdSpeed.textContent= e.data["ping"]
+          pdSpeMB.textContent= 'Jitter '+e.data["jitter"]
+          pdUnit.textContent = "milliseconds"
+      } else if (e.data["status"]==5) {
+          pdTest.textContent="Downloading..."
+          pTotal=e.data["downloadp"]/5*2+20
+          drawBlue( e.data["downloadp"], pTotal )
+          pdAccMB.textContent = e.data["downloadMB"]
+          pdSpeMB.textContent = e.data["downloadCu"]
+          pdUnit.textContent = "Mbps"
+          e.data["download"]==999?pdSpeed.textContent="wait..":pdSpeed.textContent=e.data["download"]
+      } else if (e.data["status"]==6) {
+          pdTest.textContent="Uploading..."
+          pTotal=e.data["uploadp"]/5*2+61
+          drawBlue( e.data["uploadp"], pTotal )
+          pdAccMB.textContent = e.data["uploadMB"]
+          pdSpeMB.textContent = e.data["uploadCu"]
+          pdUnit.textContent = "Mbps"
+          e.data["upload"]==999?pdSpeed.textContent="wait..":pdSpeed.textContent=e.data["upload"]
+      }
     }
-    worker.postMessage({ action:"start", currentUrl:window.location.href, seconds:document.getElementById('st-sec').value })
+    worker.postMessage({ action:"start", currentUrl:window.location.href, seconds: 20 })
   }
 
   function stopTest() { if (worker) worker.postMessage({action:"abort"}) }
 
+//  OpenLayer stuff
+function Arcc(pointA, pointB) {
+  pointA= ol.proj.transform(pointA,"EPSG:3857","EPSG:4326")
+  pointB= ol.proj.transform(pointB,"EPSG:3857","EPSG:4326")
+  var start = { x: pointA[0], y: pointA[1] }
+  var end   = { x: pointB[0], y: pointB[1] }
+  var generator = new arc.GreatCircle(start, end, {'name': ''})
+  var line = generator.Arc(100,{offset:10})
+  var coordinates = line.geometries[0].coords
+  coordinates.forEach((e,i,a)=>a[i]=ol.proj.transform(e,"EPSG:4326","EPSG:3857") )
+  return new ol.geom.LineString(coordinates)
+}
+
+var view = new ol.View({ center: [0, 0], zoom: 4})
+
+var map = new ol.Map({
+  layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
+  target: 'map', controls: ol.control.defaults({ attribution: false, zoom: false, rotate: false }),
+  view: view
+})
+map.getInteractions().forEach(i=>i.setActive(false))
+
+var geoLoc = new ol.Geolocation({ projection: view.getProjection() });
+
+var anchor = new ol.style.Style({ image: new ol.style.Circle({ radius: 6, fill: new ol.style.Fill({ color: '#3399CC' }), stroke: new ol.style.Stroke({ color: '#fff', width: 2 }) }) })
+var tline  = new ol.style.Style({ stroke: new ol.style.Stroke({color:"#0FF", width:8}) })
+var pServer= new ol.Feature()
+var pClient= new ol.Feature()
+var aClient= new ol.Feature()
+var CliServ= new ol.Feature()
+pServer.setStyle(anchor)
+pClient.setStyle(anchor)
+CliServ.setStyle(tline)
+pServer.setGeometry( new ol.geom.Point( ol.proj.transform([13.4105,52.5244],"EPSG:4326","EPSG:3857") ) )
+ipSourceVector= new ol.source.Vector({ features: [aClient, pClient, pServer, CliServ] })
+new ol.layer.Vector({ map: map, source: ipSourceVector });
+
+geoLoc.on('change:position', ()=>{
+  let cc= geoLoc.getPosition()
+  if (cc) {
+    pClient.setGeometry( new ol.geom.Point(cc) )
+    CliServ.setGeometry( Arcc(pServer.getGeometry().getCoordinates(),pClient.getGeometry().getCoordinates() ) )
+    view.fit(CliServ.getGeometry(), {padding: [50,50,50,50], duration: 2000});
+  }
+})
+geoLoc.on('change:accuracyGeometry', ()=>{aClient.setGeometry(geoLoc.getAccuracyGeometry()) })
+setTimeout(()=>geoLoc.setTracking(1),2000)
+//setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform([-16.2852,28.4691],"EPSG:4326","EPSG:3857") }), 1000)
+
 </script>
 
-</body>
 </html>
-
 
 <?php
 }
