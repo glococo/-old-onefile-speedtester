@@ -1,7 +1,7 @@
 # ES6/PHP OneFile-SpeedTester
 
-One simple PHP file SpeedTester to direct drop on your Web Server
-Javascript ES6 - CSS3 - Canvas2D - PHP
+- One simple file to direct drop on your Web Server
+- Writen in Javascript ES6 - CSS3 - Canvas2D - PHP with nano.
 
 ## Compatibility
 - Any ES6 compatible browser. No ES6 backward compatibility
