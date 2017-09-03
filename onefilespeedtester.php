@@ -1,4 +1,7 @@
 <?php
+define("RUNNING_TEST","15");
+define("RUNNING_TEST_CELLULAR","5");
+
 switch( $_GET["action"] ) {
   case "upload":
   case "ping":
@@ -36,17 +39,18 @@ switch( $_GET["action"] ) {
     html, body { height: 100%; }
     body { padding:0; margin:0; font-family: Ubuntu, sans-serif; }
     .map { height:100%; width:100%; opacity:1.0; position: absolute; z-index:1 }
-    .main{ height:100%; width:100%; opacity:.75; position: absolute; z-index:2; background-color:transparent; }
+    .main{ min-height:100%; margin: 0 auto; width: 100%; opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden}
     div[id^="mt_"]{ width:100%; text-align:center; vertical-align:middle }
     input[type=button] { font: 25px Ubuntu, sans-serif; padding: .5vw 6vw; text-align:center; box-shadow: .1vw .1vw .5vw RGBA(5,5,5,.5); border:0; border-radius: .25vw; }
     #st-start { background: linear-gradient(#73c3f9, #2980b9, #3498db); color: #FFF }
     #st-start:hover { background-color: #08f; color: #fff; border-color: #08f }
     #st-stop { background: linear-gradient(#ff6767, #bd0b0b, #c72e2e); color: #FFF; display:none}
     #st-stop:hover  { background-color: #C23; color: #FFF; border-color: #C23 }
-    #mt_1 { font-size: 6vw; color:#FFF; text-shadow:1px 1px 4px #000 }
-    #mt_1a{ font-size: 2vw; color:#FFF; text-shadow:0px 0px 4px #000 }
-    #mt_4 { display:none; height: 20vh; background: linear-gradient(RGBA(4,4,4,.4), RGBA(4,4,4,.8)); /*display:table;*/ border-collapse: separate;border-spacing: .3vw;}
-    #mt_4 div { width:24%; display:table-cell; vertical-align:middle; border-radius: 1vw 1vw 0 0; background:linear-gradient(RGBA(4,4,4,.4), RGBA(4,4,4,.8)) }
+    #mt_1 { font-size: 8vw; color:#FFF; text-shadow:1px 1px 4px #000 }
+    #mt_2 { font-size: 5vmin; color:#444; text-shadow:0px 0px 4px #FFF }
+    #mt_4 {  }
+    #mt_5 { height: 40px; display:table; border-collapse: separate; border-spacing: 1vw; position:absolute; bottom:0; font-size: 4vmin;}
+    #mt_5 div { vertical-align:middle;width:23%; display:table-cell; border-radius: 1vw; color:#FFF; background:linear-gradient(#3cc8f9, #3f7f96); text-shadow:0 0 3px #666; box-shadow:0 0 4px #333; opacity:0}
     .st-sec { width:40px }
     .progress-bar { display: inline-block; position: relative; width:280px;height:280px; margin:0; padding:0; opacity: 0; transition: opacity 1s ease-in-out}
     .progress-bar canvas { position: absolute; left:0}
@@ -60,18 +64,18 @@ switch( $_GET["action"] ) {
 <body>
   <div id="map" class="map"></div>
   <div class="main">
-    <div id="mt_1">ES6/PHP One File Speedtest</div>
-    <div id="mt_1a"></div>
-    <div id="mt_2"><div class="progress-bar" id="progress-bar">
+    <div id="mt_1">ES6/PHP 1File Speedtest</div>
+    <div id="mt_2"></div>
+    <div id="mt_3"><div class="progress-bar" id="progress-bar">
         <canvas id="pBase" height="280px" width="280px"></canvas>
         <canvas id="pBlue" height="280px" width="280px"></canvas>
         <div class="progress-data"> <span id="pdAccMB"></span><br><span id="pdSpeed"></span><br><span id="pdUnit"></span><br><span id="pdSpeMB"></span><br><br><span id="pdTest"></span> </div>
       </div>
     </div>
-    <div id="mt_3"><input type="button" id="st-start" onclick="startTest()" value=" S t a r t ">
+    <div id="mt_4"><input type="button" id="st-start" onclick="startTest()" value=" S t a r t ">
                    <input type="button" id="st-stop" onclick="stopTest()" value=" S t o p ">
     </div>
-    <div id="mt_4"> <div id="gohome">&nbsp;</div><div id="goresults">b</div><div id="goconfig">c</div><div id="goabout">d</div> </div>
+    <div id="mt_5"> <div id="rPing"></div><div id="rJitter"></div><div id="rDownload"></div><div id="rUpload"></div> </div>
   </div>
 </body>
 
@@ -262,7 +266,6 @@ function upload() {
   e.arc(140,140,110,0,2*Math.PI)
   e.stroke()
   e.beginPath()
-//  e.lineWidth= 19
   e.strokeStyle= '#EEE'
   e.arc(140,140,110,.25*Math.PI,.75*Math.PI)
   e.stroke()
@@ -303,59 +306,82 @@ function drawBlue(percent,total){
   var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   var clientIP='<?php echo $_SERVER['REMOTE_ADDR']?>'
   var wireless=''
+  var running_test=<?php echo RUNNING_TEST?>;
   try { if (connection.type) wireless=connection.type } catch (e) {}
-  if (wireless) { document.getElementById('mt_1a').innerHTML='Connected trought '+wireless+' - IP: '+clientIP }
-    else { document.getElementById('mt_1a').innerHTML='Your IP: '+clientIP }
+  if (wireless) { document.getElementById('mt_2').innerHTML='Connected trought '+wireless+' - IP: '+clientIP }
+    else { document.getElementById('mt_2').innerHTML='Your IP: '+clientIP }
+  if (wireless=="cellular") running_test=<?php echo RUNNING_TEST_CELLULAR?>;
 
   function startTest() {
     document.getElementById('progress-bar').style.opacity=1;
     document.getElementById('st-start').style.display= "none"
     document.getElementById('st-stop').style.display= "unset"
 
-    var blob = new Blob([ document.querySelector('#workerBlob').textContent ], { type: "text/javascript" });
-    worker = new Worker(window.URL.createObjectURL(blob));
+    var blob = new Blob([ document.querySelector('#workerBlob').textContent ], { type: "text/javascript" })
+    worker = new Worker(window.URL.createObjectURL(blob))
     var askInterval = setInterval( ()=>worker.postMessage({action:"status"}), 100)
     worker.onmessage = (e) => {
       var pdAccMB = document.getElementById('pdAccMB')
       var pdSpeed = document.getElementById('pdSpeed')
       var pdSpeMB = document.getElementById('pdSpeMB')
       var pdTest  = document.getElementById('pdTest')
-      var pTotal;
+      var pTotal, currentTask=0;
 
-      if (e.data["status"] < 3) {
-        clearInterval(askInterval)
-        document.getElementById('st-start').style.display= "unset"
-        document.getElementById('st-stop').style.display= "none"
-        worker = null
-        console.log("Done, status: "+e.data["status"])
-      }
       if (e.data["status"]==4) {
-          pdTest.textContent="Ping + Jitter"
+          if(currentTask!=4) { currentTask=4; pdTest.textContent="Ping + Jitter"; pdUnit.textContent = "milliseconds"; pdAccMB.textContent=""; }
           pTotal= e.data["pingp"]/5
           drawBlue( e.data["pingp"], pTotal )
-          pdAccMB.textContent=""
           pdSpeed.textContent= e.data["ping"]
           pdSpeMB.textContent= 'Jitter '+e.data["jitter"]
-          pdUnit.textContent = "milliseconds"
       } else if (e.data["status"]==5) {
-          pdTest.textContent="Downloading..."
+          if(currentTask!=5) {
+            currentTask=5;
+            pdTest.textContent="Downloading...";
+            document.getElementById("rPing").innerHTML="Ping<br>"+e.data["ping"]+" milliseconds"
+            document.getElementById("rPing").style.opacity=1
+            document.getElementById("rJitter").innerHTML="Jitter<br>"+e.data["jitter"]+" milliseconds"
+            document.getElementById("rJitter").style.opacity=1
+            pdUnit.textContent = "Mbps"
+          }
           pTotal=e.data["downloadp"]/5*2+20
           drawBlue( e.data["downloadp"], pTotal )
           pdAccMB.textContent = e.data["downloadMB"]
           pdSpeMB.textContent = e.data["downloadCu"]
-          pdUnit.textContent = "Mbps"
           e.data["download"]==999?pdSpeed.textContent="wait..":pdSpeed.textContent=e.data["download"]
       } else if (e.data["status"]==6) {
-          pdTest.textContent="Uploading..."
-          pTotal=e.data["uploadp"]/5*2+61
+          if(currentTask!=6) {
+            currentTask=6;
+            pdTest.textContent="Uploading..."
+            document.getElementById("rDownload").innerHTML="Download<br>"+e.data["download"]+" Mbps<br>Received: "+e.data["downloadMB"]
+            document.getElementById("rDownload").style.opacity=1
+          }
+          pTotal=e.data["uploadp"]/5*2+60
           drawBlue( e.data["uploadp"], pTotal )
           pdAccMB.textContent = e.data["uploadMB"]
           pdSpeMB.textContent = e.data["uploadCu"]
-          pdUnit.textContent = "Mbps"
           e.data["upload"]==999?pdSpeed.textContent="wait..":pdSpeed.textContent=e.data["upload"]
+      } else if (e.data["status"]==1) {
+          if(currentTask!=1) {
+            currentTask=1;
+            document.getElementById("rUpload").innerHTML="Upload<br>"+e.data["upload"]+" Mbps<br>Sent: "+e.data["uploadMB"]
+            document.getElementById("rUpload").style.opacity=1
+            pdTest.textContent="¡ Finished !";
+          }
+          pTotal=e.data["uploadp"]/5*2+60
+          drawBlue( e.data["uploadp"], pTotal )
+          pdAccMB.textContent = e.data["uploadMB"]
+          pdSpeMB.textContent = e.data["uploadCu"]
+          pdSpeed.textContent = e.data["upload"]
+      }
+      if (e.data["status"]<3) {
+          clearInterval(askInterval)
+          document.getElementById('st-start').style.display= "unset"
+          document.getElementById('st-stop').style.display= "none"
+          worker = null
+          console.log("Done, status: "+e.data["status"])
       }
     }
-    worker.postMessage({ action:"start", currentUrl:window.location.href, seconds: 20 })
+    worker.postMessage({ action:"start", currentUrl:window.location.href, seconds: running_test })
   }
 
   function stopTest() { if (worker) worker.postMessage({action:"abort"}) }
@@ -406,11 +432,12 @@ geoLoc.on('change:position', ()=>{
   }
 })
 geoLoc.on('change:accuracyGeometry', ()=>{aClient.setGeometry(geoLoc.getAccuracyGeometry()) })
-setTimeout(()=>geoLoc.setTracking(1),2000)
+setTimeout(()=>geoLoc.setTracking(1),1000)
+// To debug: stop using geoLocation and use fixed client Position. Comment previous line and uncomment next line.
 //setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform([-16.2852,28.4691],"EPSG:4326","EPSG:3857") }), 1000)
+window.onresize=(e)=>{view.fit(CliServ.getGeometry(), {padding: [50,50,50,50], duration: 500}) }
 
 </script>
-
 </html>
 
 <?php
