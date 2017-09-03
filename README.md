@@ -25,7 +25,7 @@ Javascript ES6 - CSS3 - Canvas2D - PHP
 Upload onefilespeedtester.php to your server
 
 ## Donate
-If you want to support this project, you can [send a donation via PayPal](https://www.paypal.me/glococo).
+If you want to support this, you can [send a donation via PayPal](https://www.paypal.me/glococo).
 
 ## License
 Copyright (C) 2017 Guillermo Lo Coco
