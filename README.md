@@ -7,6 +7,7 @@ Javascript ES6 - CSS3 - Canvas2D - PHP
 - Any ES6 compatible browser. No ES6 backward compatibility
 
 ## Features
+* Customizable test duration according connection type (cellullar:5s / Other:15s )
 * Individual and total Percentage 
 * Download speed (Mbps and MBps)
 * Download speed (last 2 seconds)
