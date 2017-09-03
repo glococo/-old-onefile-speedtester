@@ -432,10 +432,11 @@ geoLoc.on('change:position', ()=>{
   }
 })
 geoLoc.on('change:accuracyGeometry', ()=>{aClient.setGeometry(geoLoc.getAccuracyGeometry()) })
-setTimeout(()=>geoLoc.setTracking(1),1000)
-// To debug: stop using geoLocation and use fixed client Position. Comment previous line and uncomment next line.
-//setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform([-16.2852,28.4691],"EPSG:4326","EPSG:3857") }), 1000)
 window.onresize=(e)=>{view.fit(CliServ.getGeometry(), {padding: [50,50,50,50], duration: 500}) }
+
+setTimeout(()=>geoLoc.setTracking(1),1000)
+/* To debug: stop using geoLocation and use fixed client Position. Comment previous line and uncomment next line.
+ setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform([-16.2852,28.4691],"EPSG:4326","EPSG:3857") }), 1000) */
 
 </script>
 </html>
