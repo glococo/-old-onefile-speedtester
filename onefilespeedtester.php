@@ -1,5 +1,5 @@
 <?php
-define("RUNNING_TEST","15");
+define("RUNNING_TEST","5");
 define("RUNNING_TEST_CELLULAR","5");
 
 switch( $_GET["action"] ) {
@@ -36,21 +36,23 @@ switch( $_GET["action"] ) {
   <script src="https://openlayers.org/en/v4.3.1/build/ol.js"></script>
   <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script>
   <style type="text/css">
-    html, body { height: 100%; }
-    body { padding:0; margin:0; font-family: Ubuntu, sans-serif; }
+    * { padding: 0; margin: 0 }
+    html, body { height: 100%; width: 100%; font-family: Ubuntu, sans-serif }
+    a { color: #2b2b61 }
     .map { height:100%; width:100%; opacity:1.0; position: absolute; z-index:1 }
-    .main{ min-height:100%; margin: 0 auto; width: 100%; opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden}
-    div[id^="mt_"]{ width:100%; text-align:center; vertical-align:middle }
+    .code { position:absolute; bottom:0; left:0; width:auto; font-size:2vmin; border-radius: 0 1vw 0 0; box-shadow: 0 0 8px #000; background-color:#FFF; color:#555; opacity:.7; z-index:3; padding:4px 10px 4px 10px }
+    .main { opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden; display: table;
+            width:100%; height:100%; border:0; text-align:center }
+    div[id^="mt_"]{ text-align:center; vertical-align:middle; display: table-row; }
     input[type=button] { font: 25px Ubuntu, sans-serif; padding: .5vw 6vw; text-align:center; box-shadow: .1vw .1vw .5vw RGBA(5,5,5,.5); border:0; border-radius: .25vw; }
     #st-start { background: linear-gradient(#73c3f9, #2980b9, #3498db); color: #FFF }
     #st-start:hover { background-color: #08f; color: #fff; border-color: #08f }
     #st-stop { background: linear-gradient(#ff6767, #bd0b0b, #c72e2e); color: #FFF; display:none}
     #st-stop:hover  { background-color: #C23; color: #FFF; border-color: #C23 }
-    #mt_1 { font-size: 8vw; color:#FFF; text-shadow:1px 1px 4px #000 }
-    #mt_2 { font-size: 5vmin; color:#444; text-shadow:0px 0px 4px #FFF }
-    #mt_4 {  }
-    #mt_5 { height: 40px; display:table; border-collapse: separate; border-spacing: 1vw; position:absolute; bottom:0; font-size: 4vmin;}
-    #mt_5 div { vertical-align:middle;width:23%; display:table-cell; border-radius: 1vw; color:#FFF; background:linear-gradient(#3cc8f9, #3f7f96); text-shadow:0 0 3px #666; box-shadow:0 0 4px #333; opacity:0}
+    #mt_1 { font-size: 8vmin; color:#FFF; text-shadow:1px 1px 4px #000 }
+    #mt_2 { font-size: 4vmin; color:#444; text-shadow:0px 0px 4px #FFF }
+    #mt_5 { display:inline-table; border-spacing: 1vw;}
+    #mt_5 div { display:table-cell;width:23%; opacity:0;vertical-align:middle;border-radius:1vw; color:#FFF;font-size:1.8vw;background:linear-gradient(#3cc8f9, #3f7f96); text-shadow:0 0 3px #666; box-shadow:0 0 4px #333 }
     .st-sec { width:40px }
     .progress-bar { display: inline-block; position: relative; width:280px;height:280px; margin:0; padding:0; opacity: 0; transition: opacity 1s ease-in-out}
     .progress-bar canvas { position: absolute; left:0}
@@ -58,11 +60,19 @@ switch( $_GET["action"] ) {
     #pdAccMB, #pdSpeMB { font-size: 20px }
     #pdUnit,#pdTest  { font-size: 15px }
     #pdSpeed { font-size: 50px; line-height:100% }
+  @media only screen and (orientation: landscape) and (max-height: 500px) {
+    div[id^="mt_"] { float: right; clear: right; margin: .3vw 1vw .3vw 1vw; width:unset}
+    #mt_3 { float: left; clear: left; padding: 0vw 1vw 0vw 3vw; position: absolute}
+    #mt_5 { display:unset }
+    #mt_5 div { padding: .3vw 1vw .3vw 1vw; margin: .5vw; display:block; width:unset}
+  }
   </style>
 </head>
 
 <body>
   <div id="map" class="map"></div>
+  <div class="code">Designed by: <a href="www.linkedin.com/in/guillermo.lococo">Guillermo Lo Coco</a>
+                <br>Source Code: <a href="https://github.com/glococo/onefile-speedtester">Github</a></div>
   <div class="main">
     <div id="mt_1">ES6/PHP 1File Speedtest</div>
     <div id="mt_2"></div>
@@ -352,7 +362,7 @@ function drawBlue(percent,total){
           if(currentTask!=6) {
             currentTask=6;
             pdTest.textContent="Uploading..."
-            document.getElementById("rDownload").innerHTML="Download<br>"+e.data["download"]+" Mbps<br>Received: "+e.data["downloadMB"]
+            document.getElementById("rDownload").innerHTML="Download "+e.data["download"]+" Mbps<br>Received: "+e.data["downloadMB"]
             document.getElementById("rDownload").style.opacity=1
           }
           pTotal=e.data["uploadp"]/5*2+60
@@ -363,7 +373,7 @@ function drawBlue(percent,total){
       } else if (e.data["status"]==1) {
           if(currentTask!=1) {
             currentTask=1;
-            document.getElementById("rUpload").innerHTML="Upload<br>"+e.data["upload"]+" Mbps<br>Sent: "+e.data["uploadMB"]
+            document.getElementById("rUpload").innerHTML="Upload "+e.data["upload"]+" Mbps<br>Sent: "+e.data["uploadMB"]
             document.getElementById("rUpload").style.opacity=1
             pdTest.textContent="¡ Finished !";
           }
