@@ -1,12 +1,13 @@
 # ES6/PHP OneFile-SpeedTester
 
-One simple PHP file SpeedTester to direct drop on your Web Server
-Javascript ES6 - CSS3 - Canvas2D - PHP
+- One simple file to direct drop on your Web Server
+- Writen in Javascript ES6 - CSS3 - Canvas2D - PHP with nano.
 
 ## Compatibility
 - Any ES6 compatible browser. No ES6 backward compatibility
 
 ## Features
+* Customizable test duration according connection type (cellullar:5s / Other:15s )
 * Individual and total Percentage 
 * Download speed (Mbps and MBps)
 * Download speed (last 2 seconds)
@@ -25,7 +26,7 @@ Javascript ES6 - CSS3 - Canvas2D - PHP
 Upload onefilespeedtester.php to your server
 
 ## Donate
-If you want to support this project, you can [send a donation via PayPal](https://www.paypal.me/glococo).
+If you want to support this, you can [send a donation via PayPal](https://www.paypal.me/glococo).
 
 ## License
 Copyright (C) 2017 Guillermo Lo Coco
