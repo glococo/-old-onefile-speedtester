@@ -315,6 +315,7 @@ function drawBlue(percent,total){
   var worker = null
   var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   var clientIP='<?php echo $_SERVER['REMOTE_ADDR']?>'
+  var clientCC=[<?php echo str_replace('"','',json_decode(file_get_contents("http://ipinfo.io/".$_SERVER['REMOTE_ADDR']."/json"))->loc) ?>]
   var wireless=''
   var running_test=<?php echo RUNNING_TEST?>;
   try { if (connection.type) wireless=connection.type } catch (e) {}
@@ -444,9 +445,8 @@ geoLoc.on('change:position', ()=>{
 geoLoc.on('change:accuracyGeometry', ()=>{aClient.setGeometry(geoLoc.getAccuracyGeometry()) })
 window.onresize=(e)=>{view.fit(CliServ.getGeometry(), {padding: [50,50,50,50], duration: 500}) }
 
-setTimeout(()=>geoLoc.setTracking(1),1000)
-/* To debug: stop using geoLocation and use fixed client Position. Comment previous line and uncomment next line.
- setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform([-16.2852,28.4691],"EPSG:4326","EPSG:3857") }), 1000) */
+setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform(clientCC.reverse(),"EPSG:4326","EPSG:3857") }), 800)
+setTimeout(()=>geoLoc.setTracking(1),2000)
 
 </script>
 </html>
