@@ -1,5 +1,5 @@
 <?php
-define("RUNNING_TEST","5");
+define("RUNNING_TEST","15");
 define("RUNNING_TEST_CELLULAR","5");
 
 switch( $_GET["action"] ) {
@@ -71,7 +71,7 @@ switch( $_GET["action"] ) {
 
 <body>
   <div id="map" class="map"></div>
-  <div class="code">Designed by: <a href="www.linkedin.com/in/guillermo.lococo">Guillermo Lo Coco</a>
+  <div class="code">Designed by: <a href="https://www.linkedin.com/in/guillermolococo">Guillermo Lo Coco</a>
                 <br>Source Code: <a href="https://github.com/glococo/onefile-speedtester">Github</a></div>
   <div class="main">
     <div id="mt_1">ES6/PHP 1File Speedtest</div>
@@ -445,7 +445,7 @@ geoLoc.on('change:position', ()=>{
 geoLoc.on('change:accuracyGeometry', ()=>{aClient.setGeometry(geoLoc.getAccuracyGeometry()) })
 window.onresize=(e)=>{view.fit(CliServ.getGeometry(), {padding: [50,50,50,50], duration: 500}) }
 
-setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform(clientCC.reverse(),"EPSG:4326","EPSG:3857") }), 800)
+setTimeout(()=>geoLoc.setProperties({ accuracy:140, position: ol.proj.transform(clientCC.reverse(),"EPSG:4326","EPSG:3857") }), 500)
 setTimeout(()=>geoLoc.setTracking(1),2000)
 
 </script>
