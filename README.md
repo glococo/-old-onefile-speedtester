@@ -27,8 +27,9 @@
 ## How to use in your site
 Upload onefilespeedtester.php to your server
 
-## Donate
-If you want to support this, you can [send a donation via PayPal](https://www.paypal.me/glococo).
+## Support
+Want to thanks me? just [endorse me in Linkedin](https://www.linkedin.com/in/guillermolococo).
+or if you want to support me, you can [send a donation via PayPal](https://www.paypal.me/glococo).
 
 ## License
 Copyright (C) 2017 Guillermo Lo Coco
