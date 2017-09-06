@@ -19,6 +19,7 @@
 * IP Address
 * OpenStreetMap with GeoLocation 
 * Server log file recording
+* Responsive
 
 ## Requirements
 * Nginx/Apache + PHP Web server
