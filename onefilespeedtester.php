@@ -1,6 +1,6 @@
 <?php
-define("RUNNING_TEST","5");
-define("RUNNING_TEST_CELLULAR","5");
+define("RUNNING_TEST","20");
+define("RUNNING_TEST_CELLULAR","10");
 
 switch( $_GET["action"] ) {
   case "upload":
@@ -115,7 +115,7 @@ var settings = {
   urlUpload: '?action=upload&rnd=',
   urlDownload: '?action=download&rnd=',
   tUpDown: 20,                          // Seconds to test Upload/Download Speed
-  pCache: 3000,                         // Wait miliseconds for increase TCP/IP:window -> maxSpeed
+  pCache: 5000,                         // Wait miliseconds for increase TCP/IP:window -> maxSpeed
   compFactor: 1048576/925000            // Compensation for HTTP+TCP+IP+ETH overhead. 925000 is how much data is actually carried over 1048576 (1mb) bytes downloaded/uploaded. This default value assumes HTTP+TCP+IPv4+ETH with typical MTUs over the Internet. You may want to change this if you're going through your local network with a different MTU or if you're going over IPv6
 }
 

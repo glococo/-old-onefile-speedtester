@@ -1,19 +1,19 @@
-# ES6/PHP OneFile-SpeedTester
-![ES6/PHP OneFile-SpeedTester](/screenshot.png?raw=true)
+# ES6/PHP/NODE OneFile-SpeedTester
+![ES6/PHP/NODE OneFile-SpeedTester](/screenshot.png?raw=true)
 
 - One simple file to direct drop on your Web Server
-- Writen in Javascript ES6 - CSS3 - Canvas2D - PHP with nano.
+- Writen in Javascript ES6 - CSS3 - Canvas2D - PHP - NodeJS, all with nano.
 
 ## Compatibility
 - Any ES6 compatible browser. No ES6 backward compatibility
 
 ## Features
-* Customizable test duration according connection type (cellullar:5s / Other:15s )
+* Customizable test duration according connection type (default cellullar:10s / other:20s )
 * Individual and total Percentage 
-* Download speed (Mbps and MBps)
-* Download speed (last 2 seconds)
-* Upload speed (Mbps and MBps)
-* Download speed (last 2 seconds)
+* Download speed (Mbps)
+* Download speed (last 2 seconds in MB/s)
+* Upload speed (Mbps)
+* Download speed (last 2 seconds in MB/s)
 * Ping
 * Jitter
 * IP Address
@@ -23,9 +23,10 @@
 
 ## Requirements
 * Nginx/Apache + PHP Web server
+* or NodeJS
 
 ## How to use in your site
-Upload onefilespeedtester.php to your server
+Upload onefilespeedtester[.php||.js] to your server
 
 ## Support
 Want to thanks me? just [endorse me in Linkedin](https://www.linkedin.com/in/guillermolococo).
