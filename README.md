@@ -1,4 +1,4 @@
-### ( Updated ES8 on hold version )
+### ( Updated ES8 on hold version - Working only in Chrome )
 Adding custom SharedMemoryBuffer space, Fetch, ServiceWorker, WebApp, Manifest.json and more
 (Unfortunally, fetch isn't finished, so Upload function can't work even with latest nighties)
 
