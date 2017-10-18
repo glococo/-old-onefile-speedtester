@@ -42,17 +42,17 @@ switch( $_GET["action"] ) {
     a { color: #2b2b61 }
     .map { height:100%; width:100%; opacity:1.0; position: absolute; z-index:1 }
     .code { position:absolute; bottom:0; left:0; width:auto; font-size:2vmin; border-radius: 0 1vw 0 0; box-shadow: 0 0 8px #000; background-color:#FFF; color:#555; opacity:.7; z-index:3; padding:4px 10px 4px 10px }
-    .main { opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden; display: grid; border:0; grid-auto-rows: 10% 5% 55% 10% 15%;}
-    div[id^="mt_"]{ vertical-align:middle; grid-column:1; margin: auto; }
-    input[type=button] { font-size: 4vmin; padding: .5vw 6vw; text-align:center; box-shadow: .1vw .1vw .5vw RGBA(5,5,5,.5); border:0; border-radius: .25vw; }
+    .main { opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden; display: grid; border:0; grid-template: 2fr 1fr 11fr 2fr 3fr / 100% }
+    div[id^="mt_"]{ grid-column:1; margin: auto; }
+    input[type=button] { font-size: 2.5vmax; padding: .5vw 6vw; text-align:center; box-shadow: .1vw .1vw .5vw RGBA(5,5,5,.5); border:0; border-radius: .25vw; }
     #st-start { background: linear-gradient(#73c3f9, #2980b9, #3498db); color: #FFF }
     #st-start:hover { background-color: #08f; color: #fff; border-color: #08f }
     #st-stop { background: linear-gradient(#ff6767, #bd0b0b, #c72e2e); color: #FFF; display:none}
     #st-stop:hover  { background-color: #C23; color: #FFF; border-color: #C23 }
     #mt_1 { font-size: 8vmin; color:#FFF; text-shadow:1px 1px 4px #000 }
     #mt_2 { font-size: 4vmin; color:#444; text-shadow:0px 0px 4px #FFF }
-    #mt_5 { display:inline-grid; grid-template-columns: 25% 25% 25% 25%; width: 100%;}
-    #mt_5 div { opacity:0;border-radius:1vw; color:#FFF; padding: .3vw 1vw .3vw 1vw; margin: .3vw auto; font-size: 4vmin; background:linear-gradient(#3cc8f9, #3f7f96); text-shadow:0 0 3px #666; box-shadow:0 0 4px #333 }
+    #mt_5 { display:inline-flex; flex-wrap: wrap; width: 100%;}
+    #mt_5 div { opacity:0;border-radius:1vw; color:#FFF; padding: .3vw 1vw .3vw 1vw; margin: .3vw auto; font-size: 2vmax; background:linear-gradient(#3cc8f9, #3f7f96); text-shadow:0 0 3px #666; box-shadow:0 0 4px #333 }
     .st-sec { width:40px }
     .progress-bar { display: inline-block; position: relative; width:280px;height:280px; margin:0; padding:0; opacity: 0; transition: opacity 1s ease-in-out}
     .progress-bar canvas { position: absolute; left:0}
@@ -61,10 +61,9 @@ switch( $_GET["action"] ) {
     #pdUnit,#pdTest  { font-size: 15px }
     #pdSpeed { font-size: 50px; line-height:100% }
   @media only screen and (orientation: landscape) and (max-height: 500px) {
-    .main { grid-auto-columns: 50%; grid-auto-rows: 20% 20% 20% 40%; }
+    .main { grid-template: 1fr 1fr 1fr 2fr / 1fr 1fr; }
     div[id^="mt_"] { grid-column: 2; margin: auto; width:100% }
     #mt_3 { grid-column:1; grid-row-start: 1; grid-row-end: 5; margin: auto auto auto 1vw; }
-    #mt_5 { grid-template-columns: 50% 50%; }
   }
   </style>
 </head>
