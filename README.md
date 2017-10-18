@@ -1,6 +1,6 @@
-### ( Updated ES8 on hold version - Working only in Chrome )
-Adding custom SharedMemoryBuffer space, Fetch, ServiceWorker, WebApp, Manifest.json and more
-(Unfortunally, fetch isn't finished, so Upload function can't work even with latest nighties)
+### ( ES8-Next on hold version - Working till upload only in Chrome )
+Added custom SharedMemoryBuffer space, Fetch, ServiceWorker, WebApp, Manifest.json and more
+(Unfortunally, upload isn't finished, fetch function can't observe progress due to unfinished drafts)
 
 # ES6/PHP/NODE OneFile-SpeedTester
 ![ES6/PHP/NODE OneFile-SpeedTester](/screenshot.png?raw=true)
