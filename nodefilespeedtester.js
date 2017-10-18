@@ -1,6 +1,6 @@
 const RUNNING_TEST=20
 const RUNNING_TEST_CELLULAR=10
-
+const MY_SERVER_POSITION='[13.4105,52.5244]'
 
 function getIP (eq){
   var reg=/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/
@@ -13,7 +13,8 @@ var print_main=(reqq) => `<!doctype html>
   <html>
   <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=devic$
+  <meta name="theme-color" content="#4285f4">
   <title>ES6/PHP One File Speedtester</title>
   <link rel="stylesheet" href="https://openlayers.org/en/v4.3.1/css/ol.css" type="text/css">
   <script src="https://openlayers.org/en/v4.3.1/build/ol.js"></script>
@@ -24,8 +25,8 @@ var print_main=(reqq) => `<!doctype html>
     a { color: #2b2b61 }
     .map { height:100%; width:100%; opacity:1.0; position: absolute; z-index:1 }
     .code { position:absolute; bottom:0; left:0; width:auto; font-size:2vmin; border-radius: 0 1vw 0 0; box-shadow: 0 0 8px #000; background-color:#FFF; color:#555; opacity:.7; z-index:3; padding:4px 10px 4px 10px }
-    .main { opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden; display: grid; border:0; grid-auto-rows: 10% 5% 55% 10% 15%;}
-    div[id^="mt_"]{ vertical-align:middle; grid-column:1; margin: auto; }
+    .main { opacity:.75; position: absolute; z-index:2; background-color:transparent; overflow: hidden; display: grid; border:0; grid-template: 2fr 1fr 11fr 2fr 3fr / 100% }
+    div[id^="mt_"]{ grid-column:1; margin: auto; }
     input[type=button] { font-size: 4vmin; padding: .5vw 6vw; text-align:center; box-shadow: .1vw .1vw .5vw RGBA(5,5,5,.5); border:0; border-radius: .25vw; }
     #st-start { background: linear-gradient(#73c3f9, #2980b9, #3498db); color: #FFF }
     #st-start:hover { background-color: #08f; color: #fff; border-color: #08f }
@@ -43,7 +44,7 @@ var print_main=(reqq) => `<!doctype html>
     #pdUnit,#pdTest  { font-size: 15px }
     #pdSpeed { font-size: 50px; line-height:100% }
   @media only screen and (orientation: landscape) and (max-height: 500px) {
-    .main { grid-auto-columns: 50%; grid-auto-rows: 20% 20% 20% 40%; }
+    .main { grid-template: 1fr 1fr 1fr 2fr / 1fr 1fr; }
     div[id^="mt_"] { grid-column: 2; margin: auto; width:100% }
     #mt_3 { grid-column:1; grid-row-start: 1; grid-row-end: 5; margin: auto auto auto 1vw; }
     #mt_5 { grid-template-columns: 50% 50%; }
@@ -412,7 +413,7 @@ var CliServ= new ol.Feature()
 pServer.setStyle(anchor)
 pClient.setStyle(anchor)
 CliServ.setStyle(tline)
-pServer.setGeometry( new ol.geom.Point( ol.proj.transform([13.4105,52.5244],"EPSG:4326","EPSG:3857") ) )
+pServer.setGeometry( new ol.geom.Point( ol.proj.transform(${MY_SERVER_POSITION},"EPSG:4326","EPSG:3857") ) )
 ipSourceVector= new ol.source.Vector({ features: [aClient, pClient, pServer, CliServ] })
 new ol.layer.Vector({ map: map, source: ipSourceVector });
 

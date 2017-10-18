@@ -1,6 +1,7 @@
 <?php
 define("RUNNING_TEST","20");
 define("RUNNING_TEST_CELLULAR","10");
+define("MY_SERVER_POSITION","[13.4105,52.5244]");
 
 switch( $_GET["action"] ) {
   case "upload":
@@ -429,7 +430,7 @@ var CliServ= new ol.Feature()
 pServer.setStyle(anchor)
 pClient.setStyle(anchor)
 CliServ.setStyle(tline)
-pServer.setGeometry( new ol.geom.Point( ol.proj.transform([13.4105,52.5244],"EPSG:4326","EPSG:3857") ) )
+pServer.setGeometry( new ol.geom.Point( ol.proj.transform(<?php echo MY_SERVER_POSITION?>,"EPSG:4326","EPSG:3857") ) )
 ipSourceVector= new ol.source.Vector({ features: [aClient, pClient, pServer, CliServ] })
 new ol.layer.Vector({ map: map, source: ipSourceVector });
 
