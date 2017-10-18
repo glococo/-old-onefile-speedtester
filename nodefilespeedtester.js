@@ -34,7 +34,7 @@ var print_main=(reqq) => `<!doctype html>
     #st-stop:hover  { background-color: #C23; color: #FFF; border-color: #C23 }
     #mt_1 { font-size: 8vmin; color:#FFF; text-shadow:1px 1px 4px #000 }
     #mt_2 { font-size: 4vmin; color:#444; text-shadow:0px 0px 4px #FFF }
-    #mt_5 { display:inline-flex; flex-wrap: wrap; width: 100%;}
+    #mt_5 { display:inline-flex; flex-wrap: nowrap; width: 100%;}
     #mt_5 div { opacity:0;border-radius:1vw; color:#FFF; padding: .3vw 1vw .3vw 1vw; margin: .3vw auto; font-size: 2vmax; background:linear-gradient(#3cc8f9, #3f7f96); text-shadow:0 0 3px #666; box-shadow:0 0 4px #333 }
     .st-sec { width:40px }
     .progress-bar { display: inline-block; position: relative; width:280px;height:280px; margin:0; padding:0; opacity: 0; transition: opacity 1s ease-in-out}
@@ -47,6 +47,7 @@ var print_main=(reqq) => `<!doctype html>
     .main { grid-template: 1fr 1fr 1fr 2fr / 1fr 1fr; }
     div[id^="mt_"] { grid-column: 2; margin: auto; width:100% }
     #mt_3 { grid-column:1; grid-row-start: 1; grid-row-end: 5; margin: auto auto auto 1vw; }
+    #mt_5 { flex-wrap: wrap; }
   }
   </style>
 </head>
