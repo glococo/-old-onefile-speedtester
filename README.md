@@ -1,6 +1,6 @@
-### ( ES8-Next on hold version - Working till upload only in Chrome )
-Added custom SharedMemoryBuffer space, Fetch, ServiceWorker, WebApp, Manifest.json and more
-(Unfortunally, upload isn't finished, fetch function can't observe progress due to unfinished drafts)
+### ES8 on hold
+Added SharedArrayBuffer, Fetch, ServiceWorker, WebApp, Manifest.json and more
+Unfortunally, SharedArrayBuffer was disabled by Spectre&Meltdown in almost all browsers and fetch function can't observe upload progress due to unfinished drafts
 
 # ES6/PHP/NODE OneFile-SpeedTester
 ![ES6/PHP/NODE OneFile-SpeedTester](/screenshot.png?raw=true)
@@ -33,8 +33,7 @@ Added custom SharedMemoryBuffer space, Fetch, ServiceWorker, WebApp, Manifest.js
 Upload onefilespeedtester[.php||.js] to your server
 
 ## Support
-Want to thanks me? just [endorse me in Linkedin](https://www.linkedin.com/in/guillermolococo).
-or if you want to support me, you can [send a donation via PayPal](https://www.paypal.me/glococo).
+Want to thanks me? just [endorse me in Linkedin](https://www.linkedin.com/in/guillermolococo)
 
 ## License
 Copyright (C) 2017 Guillermo Lo Coco
